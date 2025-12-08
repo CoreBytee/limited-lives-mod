@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "limited-lives",
+	"version": "${version}",
+	"name": "Limited Lives",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": ["CoreByte"],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/limited-lives/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["me.corebyte.limitedlives.LimitedLives"]
+	},
+	"mixins": ["limited-lives.mixins.json"],
+	"depends": {
+		"fabricloader": ">=0.18.1",
+		"minecraft": "~1.21.10",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
