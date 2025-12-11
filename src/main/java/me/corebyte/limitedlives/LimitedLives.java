@@ -1,10 +1,8 @@
 package me.corebyte.limitedlives;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.serialization.Codec;
 import java.util.EnumSet;
-import java.util.List;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -78,23 +76,40 @@ public class LimitedLives implements ModInitializer {
 		}
 	}
 
+	private static Text formatName(ServerPlayerEntity player) {
+		Formatting nameColor;
+		int lives = getLives(player);
+
+		if (lives >= 3) {
+			nameColor = Formatting.GREEN;
+		} else if (lives == 2) {
+			nameColor = Formatting.YELLOW;
+		} else if (lives == 1) {
+			nameColor = Formatting.RED;
+		} else {
+			nameColor = Formatting.DARK_RED;
+		}
+
+		return Text.literal(player.getDisplayName().getString()).formatted(
+			nameColor
+		);
+	}
+
 	public static Text formatTabName(ServerPlayerEntity player) {
 		int gracePeriod = getGracePeriod(player);
 		int lives = getLives(player);
 
-		if (gracePeriod > 0) {
-			return Text.literal("[")
-				.append(Text.literal("⏳").formatted(Formatting.GOLD))
-				.append("] ")
-				.append(player.getDisplayName());
-		} else {
-			return Text.literal("[")
-				.append(Integer.toString(lives))
-				.append(" ")
-				.append(Text.literal("❤").formatted(Formatting.RED))
-				.append("] ")
-				.append(player.getDisplayName());
-		}
+		boolean isGrace = gracePeriod > 0;
+
+		Text hourglass = Text.literal("⏳").formatted(Formatting.GOLD);
+		Text heart = Text.literal("❤").formatted(Formatting.RED);
+
+		return Text.literal("[")
+			.append(Text.literal(Integer.toString(lives)))
+			.append(" ")
+			.append(isGrace ? hourglass : heart)
+			.append("] ")
+			.append(formatName(player));
 	}
 
 	@Override
